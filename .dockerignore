@@ -1,0 +1,29 @@
+# Git
+.git
+.github
+
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv
+venv/
+env/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Frontend build cache & dependencies on host
+ui/node_modules
+ui/dist
+ui/.oxlintrc.json
+
+# Documentation and temporary files
+*.log
+doc/
+plans/
+examples/
+tests/

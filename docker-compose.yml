@@ -2,11 +2,16 @@ version: "3.8"
 
 services:
   api:
+    image: ghcr.io/ngominhtoan/agy2api:latest
     build: .
     ports:
-      - "8000:8000"
+      - "${PORT:-8000}:${PORT:-8000}"
     environment:
-      - AGY_API_KEY=sk-dummy
+      - PORT=${PORT:-8000}
+      - HOST=${HOST:-0.0.0.0}
+      - AGY_API_KEY=${AGY_API_KEY:-sk-dummy}
+      - AGY_IS_API_CALL=1
     # Mount local gemini config if agy is running inside docker
     volumes:
       - ~/.gemini:/root/.gemini
+    restart: unless-stopped

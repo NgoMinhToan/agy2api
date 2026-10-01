@@ -16,9 +16,6 @@ __pycache__/
 # Logs
 *.log
 
-# Docker
-.dockerignore
-
 # IDEs
 .idea/
 .vscode/
