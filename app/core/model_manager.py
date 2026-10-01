@@ -3,6 +3,7 @@ import logging
 import time
 from typing import List
 from app.api.models import Model
+from app.core.agy_runner import get_agy_bin
 
 logger = logging.getLogger(__name__)
 
@@ -34,14 +35,19 @@ async def fetch_models_from_cli() -> List[Model]:
     Executes `agy models` CLI command and parses the output into Model objects.
     Returns both slug IDs and display names for maximum OpenAI client compatibility.
     """
-    cmd = ["agy", "models"]
-    logger.info("Fetching available models from Antigravity CLI...")
-    
-    proc = await asyncio.create_subprocess_exec(
-        *cmd,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
-    )
+    agy_bin = get_agy_bin()
+    cmd = [agy_bin, "models"]
+    logger.info(f"Fetching available models from Antigravity CLI ({agy_bin})...")
+
+    try:
+        proc = await asyncio.create_subprocess_exec(
+            *cmd,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+    except FileNotFoundError:
+        logger.warning(f"Executable '{agy_bin}' not found when fetching models from CLI. Using fallback models.")
+        return []
     
     try:
         stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=10.0)

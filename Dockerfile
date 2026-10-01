@@ -20,13 +20,21 @@ FROM python:3.10-slim AS backend
 
 WORKDIR /app
 
-# Expose default environment variables
+# Install system dependencies (ca-certificates, curl, nodejs if agy requires node runtime)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# Expose default environment variables and PATH
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PORT=8000 \
     HOST=0.0.0.0 \
     AGY_API_KEY=sk-dummy \
-    AGY_IS_API_CALL=1
+    AGY_IS_API_CALL=1 \
+    PATH="/root/.local/bin:/usr/local/bin:$PATH"
 
 # Install backend dependencies
 COPY requirements.txt .

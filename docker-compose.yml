@@ -11,7 +11,10 @@ services:
       - HOST=${HOST:-0.0.0.0}
       - AGY_API_KEY=${AGY_API_KEY:-sk-dummy}
       - AGY_IS_API_CALL=1
-    # Mount local gemini config if agy is running inside docker
+      - AGY_PATH=${AGY_PATH:-agy}
+    # Mount local gemini config and agy CLI from host
     volumes:
       - ~/.gemini:/root/.gemini
+      - ~/.local/bin:/root/.local/bin:ro
+      - ~/.local:/root/.local:ro
     restart: unless-stopped
